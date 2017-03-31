@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<body>
+<hr>
+<h3>Задание 1 - "Циферблат"</h3>
+<table>
+    <tr>
+        <td>Часы</td>
+        <td><input type="range" min="1" max="12" step="1" id="hour" onChange="_calcDegree()"></td>
+        <td><p id="hour_numder"></p></td>
+    </tr>
+    <tr>
+        <td>Минуты</td>
+        <td><input type="range" min="1" max="60" step="1" id="minute" onChange="_calcDegree()"></td>
+        <td><p id="minute_numder"></p></td>
+    </tr>
+    <tr>
+        <td>Результат</td>
+        <td></td>
+        <td><p id="degree"></p></td>
+    </tr>
+</table>
+<hr>
+<h3>Задание 3 - "Небоскреб"</h3>
+<table>
+    <tr>
+        <td>
+            <input type="range" min="0" max="100" step="1" id="dam" onChange="fn_level_damage()">
+        </td>
+        <td>
+            <p id="dum_numder"></p>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <p id="rez1"></p>
+            <p id="rez2"></p>
+            <p id="rez_all"></p>
+        </td>
+    </tr>
+</table>
+
+<hr>
+<h3>Задание 2 - "Числа Фибоначчи"</h3>
+<input type="number" id="fib1">
+<input type="number" id="fib2">
+<input type="submit" id="fib_btn" onclick="fib()">
+<p id="fib_rez"></p>
+
+<script>
+    function _calcDegree() {
+        var hour = parseInt(document.getElementById('hour').value);
+        var minute = parseInt(document.getElementById('minute').value);
+
+        if (isNaN(hour)==true) hour=0;
+        if (isNaN(minute)==true) minute=0;
+
+        var degree_minute = minute * 6;                   //градусы для минутной стрелки
+        var degree_hour = (hour * 5) * 6;                 //общий градус для часовой стрелки
+        var degree_hour_minute = ((minute * 5) /60) * 6;  //градус погрешности часовой
+        var all_degree_hour = degree_hour + degree_hour_minute;
+        var rez = degree_minute - all_degree_hour;
+
+        window.document.getElementById("degree").innerHTML = "градусов :  " + "<b>" + rez + "</b>";
+        window.document.getElementById("hour_numder").innerHTML = "часов :  " + hour;
+        window.document.getElementById("minute_numder").innerHTML = "минут :  " + minute;
+
+
+        //360 град = 60 мин
+        //(360 град*1)/60=6
+        //1 минута = 6 градусов
+        // 60мин.мин - 5 мин.час
+        //1 мин.мин - х мин.час (0,08333 мин.час)
+    }
+
+// Задание 3------------------------------------------------
+
+    /*
+    0. Проверка осуществляеться в два подхода:
+        а) проверяется каждый 10-й этаж начиная с 10-го и выше;
+            (при условии что "n-й" этаж повреждает объект, проверка переходит на подэтажи).
+        б) проверяются подэтажи 1-9 или 21-29 или 31-39.
+
+    1. первая проверка 10-й этаж
+    2. вторая 20-й этаж
+    3. и.т.д до 100-го этажа
+    4. если например на 70-м этаже происходит разбитие то вторым объектом проверяем 10-ку этажей
+    в диапазоне от 61 до 69-го этажа начиная с 61 и вверх.
+
+    общее число проверок (максимальное) - 19.
+
+    ps. Отличительная особенность от метода бинарного поиска в том что данный метод соответствует
+    всем условиям описаным в тз.
+    Так же логично начинать с нижележащих этажей переиспользуя уцелевший экспериментальный образец по несколько раз.
+     */
+
+    function fn_level_damage() {
+        var level_damage = document.getElementById('dam').value;
+        window.document.getElementById('dum_numder').innerHTML = "<i>этаж повреждения - </i>" + level_damage;
+
+        level_damage.split('',3);
+
+        for ( var _i=10; _i<110; _i=_i+10 ) {
+            console.log(_i);
+            //window.document.getElementById('rez1').innerHTML = _i;
+            if (_i == level_damage[0] + 0) {
+                break;
+            }
+        }
+        for ( var _j=1; _j<10; _j++ ) {
+            console.log(_j);
+            //window.document.getElementById('rez2').innerHTML = _j;
+            if (_j == level_damage[1]) {
+                break;
+            }
+        }
+
+        var str_fin = "Общее число проверок - ";
+        var var_fin = (Number(_i)/10) + Number(_j);
+        window.document.getElementById('rez_all').innerHTML = str_fin + "<b>"+var_fin+"</b>";
+    }
+
+// Задание 2------------------------------------------------
+
+    var exam = "0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987";
+
+    function fib() {
+        var num_1 = parseInt(document.getElementById('fib1').value);
+        var num_2 = parseInt(document.getElementById('fib2').value);
+        for (_k=0; _k<98; _k++) {
+            var main_num = num_1 + num_2;
+            num_1 = num_2;
+            num_2 = main_num;
+
+            console.log(main_num);
+            document.write(main_num + ", ");
+        }
+        return num_2;
+    }
+    console.log(fib());
+</script>
+</body>
+</html>
